@@ -1,4 +1,5 @@
 import os
+from dataclasses import dataclass
 
 import requests
 from dotenv import load_dotenv
@@ -8,14 +9,22 @@ load_dotenv()
 price_server_url = os.getenv("PRICE_SERVER_URL")
 
 
-class Spot:
+class SpotPrice:
+    def __init__(self, response: dict) -> None:
+        self.base = response["base"]
+        self.currency = response["currency"]
+        self.amount = response["amount"]
+        self.date = response["date"]
+
+
+class SpotFetcher:
     @staticmethod
     def get_spot_price(symbol: str):
         response = requests.get(price_server_url + f"?symbol={symbol}")
         data = response.json()
 
         if response.status_code == 200:
-            return data
+            return SpotPrice(data)
 
         print(f"Http Exception occurred. {data}")
         return f"exception: {data}"
@@ -26,7 +35,7 @@ class Spot:
         data = response.json()
 
         if response.status_code == 200:
-            return data
+            return SpotPrice(data)
 
         print(f"Http Exception occurred. {data}")
         return f"exception: {data}"
