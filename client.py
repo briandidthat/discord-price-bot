@@ -1,6 +1,6 @@
 import discord
 
-from spot import SpotFetcher
+from spot import SpotFetcher, SpotPrice
 
 
 class Client(discord.Client):
@@ -17,7 +17,9 @@ class Client(discord.Client):
         if message.author == self.user:
             return
 
-        response = SpotFetcher.get_spot_price("BTC")
-
         if self.user.mentioned_in(message):
-            await message.channel.send(response.amount)
+            spot_prices: list[SpotPrice] = SpotFetcher.get_multiple_spot_prices(["BTC", "ETH", "CRV"])
+            response = [f"{s.base}: {s.amount} \n" for s in spot_prices]
+            response_message = "".join(response)
+
+            await message.channel.send(response_message)
