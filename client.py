@@ -18,8 +18,18 @@ class Client(discord.Client):
             return
 
         if self.user.mentioned_in(message):
-            spot_prices: list[SpotPrice] = SpotFetcher.get_multiple_spot_prices(["BTC", "ETH", "CRV"])
-            response = [f"{s.base}: {s.amount} \n" for s in spot_prices]
-            response_message = "".join(response)
+            selection = discord.ui.Select(min_values=1, max_values=5, placeholder="chose an operation")
+            selection.add_option(label="current spot price", value="spot")
+            selection.add_option(label="historical spot price", value="historical")
+            selection.add_option(label="current price for multiple coins", value="multiple_spot")
+            selection.add_option(label="historical price for multiple coins", value="multiple_historical")
+            selection.add_option(label="statistics for a coin", value="statistics")
 
-            await message.channel.send(response_message)
+            view = discord.ui.View()
+            view.add_item(selection)
+
+            # spot_prices: list[SpotPrice] = SpotFetcher.get_multiple_spot_prices(["BTC", "ETH", "CRV"])
+            # response = [f"{s.base}: {s.amount} \n" for s in spot_prices]
+            # response_message = "".join(response)
+
+            await message.channel.send("Hi.", view=view)
