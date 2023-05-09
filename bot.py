@@ -21,8 +21,8 @@ async def on_ready():
 
 
 @bot.command(name="spot", description="get the current spot price of a token")
-async def spot(ctx, symbol: str = commands.parameter(default="default")):
-    if symbol == "default":
+async def spot(ctx, symbol: str = None):
+    if symbol is None:
         await ctx.send("You must provide a symbol. Try again")
         return
     await ctx.send(f"you requested {symbol}'s spot price")
