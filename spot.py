@@ -1,8 +1,7 @@
+import locale
 import os
 
-import locale
 import requests
-
 from dotenv import load_dotenv
 
 # load environment variables
@@ -24,46 +23,36 @@ class SpotPrice:
 class SpotFetcher:
     @staticmethod
     def get_spot_price(symbol: str):
-        response = requests.get(f"{price_server_url}?symbol={symbol}")
-        data = response.json()
-
-        if response.status_code == 200:
-            return SpotPrice(data)
-
-        print(f"Http Exception occurred. {data}")
-        return f"exception: {data}"
+        try:
+            response = requests.get(f"{price_server_url}?symbol={symbol}")
+            return SpotPrice(response.json())
+        except Exception as e:
+            print(f"Http Exception occurred. {e.__str__()}")
 
     @staticmethod
     def get_historical_spot_price(symbol: str, date: str):
-        response = requests.get(f"{price_server_url}?symbol={symbol}&date={date}")
-        data = response.json()
-
-        if response.status_code == 200:
-            return SpotPrice(data)
-
-        print(f"Http Exception occurred. {data}")
-        return f"exception: {data}"
+        try:
+            response = requests.get(f"{price_server_url}?symbol={symbol}&date={date}")
+            return SpotPrice(response.json())
+        except Exception as e:
+            print(f"Http Exception occurred. {e.__str__()}")
 
     @staticmethod
     def get_multiple_spot_prices(symbols: list[str]):
-        response = requests.get(f"{price_server_url}/batch", json={"requests": symbols})
-        data = response.json()
-
-        if response.status_code == 200:
+        try:
+            response = requests.get(f"{price_server_url}/batch", json={"requests": symbols})
+            data = response.json()
             responses = [SpotPrice(x) for x in data]
             return responses
-
-        print(f"Http Exception occurred. {data}")
-        return f"exception: {data}"
+        except Exception as e:
+            print(f"Http Exception occurred. {e}")
 
     @staticmethod
     def get_multiple_historical_spot_prices(symbols: dict[str, str]):
-        response = requests.get(f"{price_server_url}/historical", json={"requests": symbols})
-        data = response.json()
-
-        if response.status_code == 200:
+        try:
+            response = requests.get(f"{price_server_url}/historical", json={"requests": symbols})
+            data = response.json()
             responses = [SpotPrice(x) for x in data]
             return responses
-
-        print(f"Http Exception occurred. {data}")
-        return f"exception: {data}"
+        except Exception as e:
+            print(f"Http Exception occurred. {e}")
