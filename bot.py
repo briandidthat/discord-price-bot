@@ -3,6 +3,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+from spot import SpotFetcher, SpotPrice
 
 # load environment variables
 load_dotenv()
@@ -33,7 +34,7 @@ async def historical_spot(ctx, symbol: str = None, date: str = None):
     if symbol is None or date is None:
         await ctx.send("Symbol and date cannot be null. Try again")
         return
-    await ctx.send(f" requested {symbol}'s spot price on {date}")
+    await ctx.send(f"You requested {symbol}'s spot price on {date}")
 
 
 @bot.command(name="multiple-spot", description="get the current spot price for multiple tokens")
@@ -51,7 +52,7 @@ async def multiple_historical_spot(ctx, *args):
         await ctx.send("Length of symbols list must be 1-5. Try again")
         return
 
-    # split the strings at the colon to separate symbol and date
+    # split the strings at the colon to separate symbol and date and save in list
     request_tuples = [s.split(":") for s in args]
     requests = dict()
 
