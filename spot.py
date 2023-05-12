@@ -22,25 +22,25 @@ class SpotPrice:
 
 class SpotFetcher:
     @staticmethod
-    def get_spot_price(symbol: str):
+    def get_spot_price(symbol: str, caller: str):
         try:
-            response = requests.get(f"{price_server_url}?symbol={symbol}")
+            response = requests.get(f"{price_server_url}?symbol={symbol}", headers={"caller": caller})
             return SpotPrice(response.json())
         except Exception as e:
-            print(f"Http Exception occurred. {e.__str__()}")
+            print(f"Http Exception occurred. {e}")
 
     @staticmethod
-    def get_historical_spot_price(symbol: str, date: str):
+    def get_historical_spot_price(symbol: str, date: str, caller: str):
         try:
-            response = requests.get(f"{price_server_url}?symbol={symbol}&date={date}")
+            response = requests.get(f"{price_server_url}?symbol={symbol}&date={date}", headers={"caller": caller})
             return SpotPrice(response.json())
         except Exception as e:
-            print(f"Http Exception occurred. {e.__str__()}")
+            print(f"Http Exception occurred. {e}")
 
     @staticmethod
-    def get_multiple_spot_prices(symbols: list[str]):
+    def get_batch_spot_price(symbols: list[str], caller: str):
         try:
-            response = requests.get(f"{price_server_url}/batch", json={"requests": symbols})
+            response = requests.get(f"{price_server_url}/batch", json={"requests": symbols}, headers={"caller": caller})
             data = response.json()
             responses = [SpotPrice(x) for x in data]
             return responses
@@ -48,9 +48,10 @@ class SpotFetcher:
             print(f"Http Exception occurred. {e}")
 
     @staticmethod
-    def get_multiple_historical_spot_prices(symbols: dict[str, str]):
+    def get_batch_historical_spot_price(symbols: dict[str, str], caller: str):
         try:
-            response = requests.get(f"{price_server_url}/historical", json={"requests": symbols})
+            response = requests.get(f"{price_server_url}/historical", json={"requests": symbols},
+                                    headers={"caller": caller})
             data = response.json()
             responses = [SpotPrice(x) for x in data]
             return responses
