@@ -45,8 +45,9 @@ async def historical_spot(ctx, symbol: str = None, date: str = None):
 
     caller = ctx.author.name
     response: SpotPrice = SpotFetcher.get_historical_spot_price(symbol, date, caller)
+    response_text: str = f"{response.base}: {response.amount}. {response.date}"
 
-    await ctx.send(f"{response.base}'s price on {date} was {response.amount}")
+    await ctx.send(response_text)
 
 
 @bot.command(name="batch-spot", description="get the current spot price for multiple tokens")
@@ -57,8 +58,12 @@ async def batch_spot(ctx, *args):
 
     caller = ctx.author.name
     response: list[SpotPrice] = SpotFetcher.get_batch_spot_price(args, caller)
+    response_text: str = ""
 
-    await ctx.send(f"You requested ${args} spot price")
+    for spot_price in response:
+        response_text += f"{spot_price.base}: {spot_price.amount}\n"
+
+    await ctx.send(response_text)
 
 
 @bot.command(name="batch-historical-spot", description="get the historical spot price for multiple tokens")
@@ -73,12 +78,18 @@ async def batch_historical_spot(ctx, *args):
     request_tuples = [s.split(":") for s in args]
     requests = dict()
 
+    print(requests)
+
     for symbol, date in request_tuples:
         requests[symbol] = date
 
     response: list[SpotPrice] = SpotFetcher.get_batch_historical_spot_price(requests, caller)
+    response_text: str = ""
 
-    await ctx.send(f"You requested {requests} historical spot price")
+    for spot_price in response:
+        response_text += f"{spot_price.base}: {spot_price.amount}. Date: {spot_price.date}\n"
+
+    await ctx.send(response_text)
 
 
 bot.run(token=TOKEN)
