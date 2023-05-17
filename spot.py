@@ -1,23 +1,13 @@
-import locale
 import os
 
 import requests
 from dotenv import load_dotenv
 
+from util import SpotPrice, BatchRequest
+
 # load environment variables
 load_dotenv()
 price_server_url = os.getenv("PRICE_SERVER_URL")
-
-# this sets locale to the current Operating System value
-locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
-
-
-class SpotPrice:
-    def __init__(self, response: dict) -> None:
-        self.base = response["base"]
-        self.currency = response["currency"]
-        self.amount = locale.currency(float(response["amount"]), grouping=True, symbol=True)
-        self.date = response["date"]
 
 
 class SpotFetcher:
@@ -32,7 +22,8 @@ class SpotFetcher:
     @staticmethod
     def get_historical_spot_price(symbol: str, date: str, caller: str):
         try:
-            response = requests.get(f"{price_server_url}?symbol={symbol}&date={date}", headers={"caller": caller})
+            response = requests.get(f"{price_server_url}/historical?symbol={symbol}&date={date}",
+                                    headers={"caller": caller})
             return SpotPrice(response.json())
         except Exception as e:
             print(f"Http Exception occurred. {e}")
@@ -48,9 +39,9 @@ class SpotFetcher:
             print(f"Http Exception occurred. {e}")
 
     @staticmethod
-    def get_batch_historical_spot_price(symbols: dict[str, str], caller: str):
+    def get_batch_historical_spot_price(batch_request: BatchRequest, caller: str):
         try:
-            response = requests.get(f"{price_server_url}/historical", json={"requests": symbols},
+            response = requests.get(f"{price_server_url}/historical/batch", json=batch_request.serialize(),
                                     headers={"caller": caller})
             data = response.json()
             responses = [SpotPrice(x) for x in data]
