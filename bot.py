@@ -1,10 +1,13 @@
+import json
 import logging
 import os
 
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+
 from spot import SpotFetcher, SpotPrice
+from util import Request, BatchRequest
 
 # load environment variables
 load_dotenv()
@@ -16,7 +19,7 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 
 bot = commands.Bot(command_prefix="$", intents=intents)
 
-logger = logging.getLogger(name="bot.logger")
+logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
 
 
@@ -73,17 +76,16 @@ async def batch_historical_spot(ctx, *args):
         return
 
     caller = ctx.author.name
-
     # split the strings at the colon to separate symbol and date and save in list
-    request_tuples = [s.split(":") for s in args]
-    requests = dict()
-
-    print(requests)
+    request_tuples = [tuple(s.split(":")) for s in args]
+    batch_request = BatchRequest([])
 
     for symbol, date in request_tuples:
-        requests[symbol] = date
+        batch_request.add_request(Request(symbol, date))
+    # cute, but not readable
+    # BatchRequest([Request(symbol, date) for symbol, date in request_tuples])
 
-    response: list[SpotPrice] = SpotFetcher.get_batch_historical_spot_price(requests, caller)
+    response: list[SpotPrice] = SpotFetcher.get_batch_historical_spot_price(batch_request, caller)
     response_text: str = ""
 
     for spot_price in response:
