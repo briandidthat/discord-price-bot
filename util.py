@@ -30,3 +30,11 @@ class BatchRequest:
 
     def serialize(self):
         return {"requests": [r.serialize() for r in self.requests]}
+
+
+class Statistic:
+    def __init__(self, response: dict[str, str]) -> None:
+        self.token = response["token"]
+        self.price_change = response["price_change"]
+        self.percent_change = response["percent_change"]
+        self.time_delta = response["time_delta"]
