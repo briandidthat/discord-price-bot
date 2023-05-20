@@ -34,7 +34,7 @@ class BatchRequest:
 
 class Statistic:
     def __init__(self, response: dict[str, str]) -> None:
-        self.token = response["token"]
+        self.symbol = response["symbol"]
         self.price_change = response["priceChange"]
         self.percent_change = response["percentChange"]
         self.time_delta = response["timeDelta"]
