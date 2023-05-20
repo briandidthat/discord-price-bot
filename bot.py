@@ -97,10 +97,10 @@ async def statistics(ctx, symbol: str = None, start_date: str = None, end_date: 
     caller: str = ctx.author.name
 
     response: Statistic = SpotFetcher.get_price_statistics(caller, symbol, start_date, end_date)
-    response_text: str = f"{response.token} stats from {start_date} to {end_date}\n" \
-                         f"price change: {response.price_change}\n" \
-                         f"percent change: {response.percent_change}\n" \
-                         f"time delta: {response.time_delta}"
+    response_text: str = f"**{response.token} stats from {start_date} to {end_date}**\n" \
+                         f"Price change: {response.price_change}\n" \
+                         f"Percent change: {response.percent_change}%\n" \
+                         f"Timeline: {response.time_delta}"
     await ctx.send(response_text)
 
 

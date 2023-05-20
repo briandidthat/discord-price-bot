@@ -57,7 +57,7 @@ class SpotFetcher:
                 end_date = datetime.date.today()
 
             response = requests.get(
-                f"{price_server_url}/statistics?{symbol}&startDate={start_date}&end_date={end_date}",
+                f"{price_server_url}/statistics?symbol={symbol}&startDate={start_date}&end_date={end_date}",
                 headers={"caller": caller})
             return Statistic(response.json())
         except Exception as e:
