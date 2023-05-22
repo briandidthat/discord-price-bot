@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: price-server
-        image: toogroovy/discord-price-bot
+        image: briandidthat/discord-price-bot
         ports:
           - containerPort: 8080
         env:
