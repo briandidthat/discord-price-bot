@@ -1,0 +1,34 @@
+#file: noinspection YAMLSchemaValidation
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discord-price-bot
+  labels:
+    app: discord-price-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discord-price-bot
+  template:
+    metadata:
+      labels:
+        app: discord-price-bot
+    spec:
+      containers:
+      - name: price-server
+        image: toogroovy/discord-price-bot
+        ports:
+          - containerPort: 8080
+        env:
+          - name: PRICE_SERVER_URL
+            valueFrom:
+              secretKeyRef:
+                name: secrets
+                key: PRICE_SERVER_URL
+          - name: DISCORD_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: secrets
+                key: DISCORD_TOKEN
+
