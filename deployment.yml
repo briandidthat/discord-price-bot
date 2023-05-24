@@ -1,8 +1,7 @@
-#file: noinspection YAMLSchemaValidation
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: discord-price-bot
+  name: discord-bot-deployment
   labels:
     app: discord-price-bot
 spec:
@@ -31,4 +30,3 @@ spec:
               secretKeyRef:
                 name: secrets
                 key: DISCORD_TOKEN
-

@@ -1,14 +1,8 @@
-import locale
-
-# this sets locale to the current Operating System value
-locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
-
-
 class SpotPrice:
     def __init__(self, response: dict) -> None:
         self.base = response["base"]
         self.currency = response["currency"]
-        self.amount = locale.currency(float(response["amount"]), grouping=True, symbol=True)
+        self.amount = response["amount"]
         self.date = response["date"]
 
 
