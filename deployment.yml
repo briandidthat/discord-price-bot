@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: discord-bot-deployment
+  name: discord-price-bot
   labels:
     app: discord-price-bot
 spec:
