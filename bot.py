@@ -23,6 +23,12 @@ async def on_ready():
     print("price bot is online")
 
 
+@bot.command(name="health", description="get the health of the price server")
+async def health(ctx):
+    response = SpotFetcher.get_health()
+    await ctx.send(f"{response}")
+
+
 @bot.command(name="spot", description="get the current spot price of a token")
 async def spot(ctx, symbol: str = None):
     if symbol is None:
