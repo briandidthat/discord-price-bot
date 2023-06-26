@@ -5,7 +5,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 from spot import SpotFetcher, SpotPrice
-from util import Request, BatchRequest, Statistic
+from models import Request, BatchRequest, Statistic
 
 # load environment variables
 load_dotenv()
