@@ -4,7 +4,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from util import SpotPrice, BatchRequest, Statistic
+from models import SpotPrice, BatchRequest, Statistic
 
 # load environment variables
 load_dotenv()
