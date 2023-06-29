@@ -15,7 +15,7 @@ spec:
         app: discord-price-bot
     spec:
       containers:
-      - name: price-server
+      - name: price-bot
         image: briandidthat/discord-price-bot
         ports:
           - containerPort: 8080
