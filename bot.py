@@ -25,7 +25,8 @@ async def on_ready():
 
 @bot.command(name="health", description="get the health of the price server")
 async def health(ctx):
-    response = SpotFetcher.get_health()
+    caller: str = ctx.author.name
+    response = SpotFetcher.get_health(caller)
     await ctx.send(f"{response}")
 
 
