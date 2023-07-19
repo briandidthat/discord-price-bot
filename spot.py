@@ -13,9 +13,9 @@ price_server_url = os.getenv("PRICE_SERVER_URL")
 
 class SpotFetcher:
     @staticmethod
-    def get_health() -> str:
+    def get_health(caller: str) -> str:
         try:
-            response = requests.get(f"{price_server_url}/healthz", headers={"caller": "discord_bot"})
+            response = requests.get(f"{price_server_url}/healthz", headers={"caller": caller})
             return response.text
         except Exception as e:
             print(f"Http exception occurred. {e}")
