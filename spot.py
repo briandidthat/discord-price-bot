@@ -4,7 +4,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from models import SpotPrice, BatchRequest, Statistic
+from models import SpotPrice, Request, BatchRequest, Statistic
 
 # load environment variables
 load_dotenv()
@@ -22,17 +22,20 @@ class SpotFetcher:
 
     @staticmethod
     def get_spot_price(caller: str, symbol: str) -> SpotPrice:
+        request = Request(symbol, "", "")
         try:
-            response = requests.get(f"{price_server_url}/spot?symbol={symbol}", headers={"caller": caller})
+            response = requests.post(f"{price_server_url}/spot", json=request.serialize(),
+                                     headers={"caller": caller, "Content-Type": "application/json"})
             return SpotPrice(response.json())
         except Exception as e:
             print(f"Http Exception occurred. {e}")
 
     @staticmethod
     def get_historical_spot_price(caller: str, symbol: str, date: str) -> SpotPrice:
+        request = Request(symbol, date, "")
         try:
-            response = requests.get(f"{price_server_url}/spot/historical?symbol={symbol}&date={date}",
-                                    headers={"caller": caller})
+            response = requests.post(f"{price_server_url}/spot/historical", json=request.serialize(),
+                                     headers={"caller": caller})
             return SpotPrice(response.json())
         except Exception as e:
             print(f"Http Exception occurred. {e}")
@@ -40,7 +43,8 @@ class SpotFetcher:
     @staticmethod
     def get_batch_spot_price(caller: str, symbols: list[str]) -> list[SpotPrice]:
         try:
-            response = requests.get(f"{price_server_url}/spot/batch", json={"requests": symbols}, headers={"caller": caller})
+            response = requests.get(f"{price_server_url}/spot/batch", json={"requests": symbols},
+                                    headers={"caller": caller})
             data = response.json()
             responses = [SpotPrice(x) for x in data]
             return responses
