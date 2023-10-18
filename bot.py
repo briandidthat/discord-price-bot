@@ -85,7 +85,7 @@ async def batch_historical_spot(ctx, *args):
     batch_request = BatchRequest([])
 
     for symbol, date in request_tuples:
-        batch_request.add_request(Request(symbol, date))
+        batch_request.add_request(Request(symbol, date, ""))
 
     response: list[SpotPrice] = SpotFetcher.get_batch_historical_spot_price(caller, batch_request)
     response_text: str = ""

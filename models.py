@@ -7,12 +7,13 @@ class SpotPrice:
 
 
 class Request:
-    def __init__(self, symbol: str, date: str) -> None:
+    def __init__(self, symbol: str, start_date: str, end_date: str) -> None:
         self.symbol = symbol
-        self.date = date
+        self.start_date = start_date
+        self.end_date = end_date
 
     def serialize(self):
-        return {"symbol": self.symbol, "date": self.date}
+        return {"symbol": self.symbol, "startDate": self.start_date, "endDate": self.end_date}
 
 
 class BatchRequest:
